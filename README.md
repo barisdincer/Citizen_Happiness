@@ -20,15 +20,6 @@ Investigating variables that are significantly associated with happiness: This s
 
 Examining the impact of GDP per capita on happiness: Determining the connection between GDP per capita and happiness is one specific goal. The goal of the research is to ascertain whether greater levels of economic prosperity---as indicated by GDP per capita---have a significant effect on happiness levels by conducting a data analysis.
 
-
-*Research Objectives*
-
-Determine the general levels of happiness in various nations: The research aims to ascertain the general levels of happiness in various nations by examining the happiness scores offered in the data set. This objective will provide an overview of the general happiness distribution across countries.
-
-Investigating variables that are significantly associated with happiness: This study aims to pinpoint the variables that are significantly associated with happiness. The study aims to identify the most important factors that influence happiness by looking at factors like GDP per capita, social support, healthy life expectancy, freedom to make life decisions, generosity, and perceptions of corruption.
-
-Examining the impact of GDP per capita on happiness: Determining the connection between GDP per capita and happiness is one specific goal. The goal of the research is to ascertain whether greater levels of economic prosperity---as indicated by GDP per capita---have a significant effect on happiness levels by conducting a data analysis.
-
 ## Methodology
 
 Briefly describe the statistical modeling you will employ to analyze the data.

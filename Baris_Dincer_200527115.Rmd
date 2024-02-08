@@ -1,0 +1,286 @@
+---
+title: "Data Science II - Project Report Template"
+author: "Barış Dinçer"
+date: "04.06.2023"
+output:
+  html_document:
+    df_print: paged
+  pdf_document:
+    latex_engine: xelatex
+---
+
+# Contents
+3.0 [Introduction](#introduction)
+3.1 [Data Description](#data-description)
+3.2 [Data Analysis](#data-analysis)
+3.3 [Descriptive Statistics](#descriptive-statistics)
+3.4 [Data Visualization](#data-visualization)
+3.5 [Model Fit Comparison](#model-fit-comparison)
+3.6 [Evaluate Model Performance](#evaluate-model-performance)
+4.0 [References](#references)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(ggplot2)
+library(tinytex)
+
+```
+
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
+```
+
+
+## Introduction
+
+Explain your motivation for selecting this data set
+
+-   Describe the problem you investigate in your data set.
+
+**Happiness is considered an important element of human life and affects people's overall well-being and quality of life. However, the factors that influence happiness can be complex and may differ in different countries. The problem of this dataset is to identify the factors that affect happiness.**
+
+-   Provide some background on your data set
+
+**The data set used for this analysis is based on the World Happiness Report, an annual publication that assesses the happiness levels and well-being of people in various countries. The data set includes information from the years 2019. The Sustainable Development Solutions Network (SDSN) performed a thorough investigation known as the World Happiness Report in association with other experts and researchers. It takes into account multiple factors that contribute to happiness and well-being, including economic indicators, social support systems, health measures, freedom of choice, generosity, and perceptions of corruption. The dataset attempts to offer a thorough knowledge of happiness levels throughout the world and the variables affecting happiness.**
+
+-   State the main problem and research objectives that you want to accomplish
+
+**The main issue with this research is figuring out what influences happiness levels in various nations. Additionally, it can support politicians in their decision-making to advance social welfare.**
+
+*Research Objectives*
+
+**Determine the general levels of happiness in various nations: The research aims to ascertain the general levels of happiness in various nations by examining the happiness scores offered in the data set. This objective will provide an overview of the general happiness distribution across countries.**
+
+**Investigating variables that are significantly associated with happiness: This study aims to pinpoint the variables that are significantly associated with happiness. The study aims to identify the most important factors that influence happiness by looking at factors like GDP per capita, social support, healthy life expectancy, freedom to make life decisions, generosity, and perceptions of corruption.**
+
+**Examining the impact of GDP per capita on happiness: Determining the connection between GDP per capita and happiness is one specific goal. The goal of the research is to ascertain whether greater levels of economic prosperity---as indicated by GDP per capita---have a significant effect on happiness levels by conducting a data analysis.**
+
+## Methodology
+
+Briefly describe the statistical modeling you will employ to analyze the data.
+
+-   Why it is suitable for your design?
+
+**In order to understand the relationship between the dependent variable and independent variables in my variables, I chose the regression analysis technique among the statistical modeling options.**
+
+**I think there might be a connection between the independent variables and the dependent variable in my data, which is the happiness score. The happiness index is a crucial indicator of a nation's wealth and the standard of living of its people. Therefore, for the purposes of my project, it is crucial to comprehend the variables that affect the happiness score.**
+
+**Regression analysis is a technique used to model the linear relationship between the dependent variable and independent variables. In this kind of analysis, the influence of independent variables on the value of the dependent variable is determined. In this instance, I want to examine the effects of other variables (GDP per capita, social support, healthy life expectancy, freedom to make life choices, generosity, perception of corruption) on the happiness score using the happiness score as the dependent variable.**
+
+**Regression analysis can be used in a variety of situations, which is another benefit. The technique of regression analysis is widely used in a variety of disciplines, including the social sciences, economics, marketing research, and health analysis. Regression analysis makes sense, therefore, to comprehend the relationship between the variables in my data.**
+
+-   The main equations and properties can be summarized before going further on modeling.
+
+**I will apply regression analysis to estimate the coefficients of the independent variables that best predict the value of the dependent variable.**
+
+**PCA is used to reduce multidimensional datasets to fewer dimensions and to understand the structure of variability in the dataset. There are few rows in the dataset. So I'm not going to apply PCA and I don't have dimensionality reduction problems.**
+
+Such as different linear models for a prediction problem OR PCA for dimensionality reduction problem !
+
+## Explaratory Data analysis
+
+```{r data }
+# load data from desktop (I choose from kaggle)
+data2019 <- read_csv("C:/Users/baris/OneDrive/Masaüstü/2019.csv")
+```
+
+-   Mention the variables and their types for the modeling.
+
+**I will apply regression analysis to estimate the coefficients of the independent variables that best predict the value of the dependent variable.**
+
+**PCA is used to reduce multidimensional datasets to fewer dimensions and to understand the structure of variability in the dataset. There are few rows in the dataset. So I'm not going to apply PCA and I don't have dimensionality reduction problems.**
+
+Simply mention the properties of data sets with descriptive statistics, additional figures with reference to what you will employ in the modeling part.
+
+
+```{r descriptives}
+summary(data2019)
+colnames(data2019)
+dim(data2019)
+str(data2019)
+```
+
+**I will apply regression analysis to estimate the coefficients of the independent variables that best predict the value of the dependent variable.**
+
+**PCA is used to reduce multidimensional datasets to fewer dimensions and to understand the structure of variability in the dataset. There are few rows in the dataset. So I'm not going to apply PCA and I don't have dimensionality reduction problems.**
+Add as many as R-code chunks if you need !
+
+
+```{r}
+# Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```
+
+
+## Model Fit Comparison
+
+Fit your models after pre-processing your data (if it is necessary). Duplicate the below R-code chunks and create new ones if you need more.
+
+```{r preprocess}
+# Clean your data and prepare for the modeling
+anyNA(data2019)
+```
+**Dataset not have NA data**
+
+
+```{r modeling}
+# fit your model 1 for the data
+
+model <- lm(Score ~ `GDP per capita` + `Social support` + `Healthy life expectancy`, data = data2019)
+coefficients <- coef(model)
+p_values <- summary(model)$coefficients[,4]
+```
+
+```{r}
+coefficients1 <- coefficients[-1]
+variable_names <- names(coefficients1)
+data <- data.frame(variable = variable_names, coefficient = coefficients1)
+
+ggplot(data, aes(x = variable, y = coefficient)) +
+  geom_bar(stat = "identity", fill = "skyblue", width = 0.5) +
+  labs(x = "Variable", y = "Coefficient") +
+  theme_minimal()
+
+```
+
+```{r}
+par(mfrow=c(1,3))
+plot(data2019$`GDP per capita`, data2019$Score, main = "GDP per Capita vs. Happiness", xlab = "GDP per Capita", ylab = "Happiness")
+abline(model, col = "red")
+
+plot(data2019$`Social support`, data2019$Score, main = "Social Support vs. Happiness", xlab = "Social Support", ylab = "Happiness")
+abline(model, col = "red")
+
+plot(data2019$`Healthy life expectancy`, data2019$Score, main = "Healthy Life Expectancy vs. Happiness", xlab = "Healthy Life Expectancy", ylab = "Happiness")
+abline(model, col = "red")
+
+```
+
+```{r}
+# fit your model 2 for the data
+model2 <- lm(Score ~ `Freedom to make life choices` + `Generosity` + `Perceptions of corruption`, data = data2019)
+
+summary(model2)
+
+coefficients2 <- coef(model2)
+p_values2 <- summary(model2)$coefficients[,4]
+
+```
+
+```{r}
+coefficients2 <- coefficients2[-1]
+variable_names <- names(coefficients2)
+data <- data.frame(variable = variable_names, coefficient = coefficients2)
+ggplot(data, aes(x = variable, y = coefficient)) +
+  geom_bar(stat = "identity", fill = "skyblue", width = 0.5) +
+  labs(x = "Variable", y = "Coefficient") +
+  theme_minimal()
+```
+
+
+```{r}
+par(mfrow=c(1,3))
+plot(data2019$`Freedom to make life choices`, data2019$Score, main = "Freedom to Make Life Choices vs. Happiness", xlab = "Freedom to Make Life Choices", ylab = "Happiness")
+abline(model, col = "red")
+
+plot(data2019$Generosity, data2019$Score, main = "Generosity vs. Happiness", xlab = "Generosity", ylab = "Happiness")
+abline(model, col = "red")
+
+plot(data2019$`Perceptions of corruption`, data2019$Score, main = "Perceptions of Corruption vs. Happiness", xlab = "Perceptions of Corruption", ylab = "Happiness")
+abline(model, col = "red")
+```
+
+Add as many as R-code chunks if you need !
+
+## Evaluate Model Performance
+
+-   Compare your fitted models on **testing data**
+```{r}
+set.seed(123)
+train_indices <- sample(1:nrow(data2019), 0.8 * nrow(data2019))
+train_data <- data2019[train_indices, ]
+test_data <- data2019[-train_indices, ]  
+
+model1 <- lm(Score ~ `GDP per capita` + `Social support` + `Healthy life expectancy`, data = train_data)
+
+model2 <- lm(Score ~ `Freedom to make life choices` + `Generosity` + `Perceptions of corruption`, data = train_data)
+
+model1_predictions <- predict(model1, newdata = test_data)
+
+model2_predictions <- predict(model2, newdata = test_data)
+
+model1_r2 <- cor(test_data$Score, model1_predictions)^2
+
+model2_r2 <- cor(test_data$Score, model2_predictions)^2
+
+cat("Model 1 R-squared:", model1_r2, "\n")
+
+cat("Model 2 R-squared:", model2_r2, "\n")
+
+```
+
+-   Which performance metrics are calculated and compared
+
+**(Coefficient of Determination): This statistic indicates how much of the variance in the dependent variable can be accounted for by the model's independent variables. Better fits are indicated by higher R-squared values.**
+
+**R-squared, also referred to as the coefficient of determination, is a statistical metric that quantifies the percentage of the dependent variable's variation that can be accounted for by the model's independent variables. It shows how effectively the independent variables are able to explain the variation in the dependent variable.**
+
+**R-squared accepts values in the range of 0 to 1. The dependent variable cannot be predicted by the model at all if the value of 0 indicates that none of the variance in the dependent variable is explained by the independent variables. A score of 1 on the other hand denotes a perfect fit of the model to the data, with all variance in the dependent variable being explained by the independent variables.**
+
+**A better fit of the model is indicated by higher R-squared values. They contend that the independent variables considerably affect the dependent variable and contribute to the variance's explanation. It's crucial to remember that having a strong model does not always entail having a high R-squared number. For instance, overfitting, when the model performs badly on fresh data, may be indicated by extremely high R-squared values produced by utilizing a large number of independent variables.**
+
+**The parameters of a regression model are represented by coefficients, statistical estimates found through regression analysis. The influence of the dependent variable on the independent variables is expressed by these coefficients.**
+**For instance, it was discovered that the GDP per capita coefficient in the example above was 2.2181. This can be read as "If the GDP per capita variable increases by one, we estimate that the Score dependent variable will increase by 2,2181 units on average." if it is written in the first person singular.**
+**The coefficients of other independent variables can also be interpreted in a similar manner. For instance, it was discovered that the Social support variable's coefficient was 1.1242. It means, in this instance, "If the social support variable increases by one unit, we estimate that the Score dependent variable will increase by 1.1242 units on average."**
+**One of the key outcomes of regression analysis is a coefficient, which enables us to comprehend how the model affects the dependent variable. For us to comprehend the model's structure and linkages, these coefficients are a key source of data.**
+
+
+
+-   What is the optimal model selection and the end and explain why ?
+
+**R-squared calculates the percentage of the dependent variable's variance that can be accounted for by the independent variables. Adjusted R-squared penalizes the inclusion of extraneous variables by accounting for the number of variables in the model. High adjusted R-squared values, which show a strong match without overfitting, characterize the ideal model. **
+
+
+## Conclusions
+
+-   Summarize your main findings and conclude the project by emphasizing your analysis.
+**In this research, we ran a regression analysis on a dataset made up of numerous variables relating to the happiness scores of various nations. In order to create a regression model that can forecast happiness scores based on the independent variables, we set out to investigate the correlations between these factors and the happiness scores.**
+
+**To begin, we ran an exploratory data analysis to learn more about the data. We looked at the relationships between the factors and identified potential predictors of happiness ratings, including per capita GDP, social support, healthy life expectancy, independence from interference with one's personal decisions, generosity, and perceptions of corruption.**
+
+**Then, utilizing the chosen predictors, we constructed a regression model. The goal of the model was to depict the connections between the independent factors and happiness scores. We evaluated the importance of the coefficients and metrics like R-squared to see how well the model fit the data.**
+**According to our study, a sizable chunk of the variance in the happiness scores might be attributed to the independent factors that were chosen.**
+**Conclusion: According to our analysis, the independent factors we chose, such as per capita GDP, social support, healthy life expectancy, freedom of choice in one's own life, generosity, and views of corruption, significantly affect the happiness scores of nations. Based on these characteristics, the regression model we developed can be used to forecast happiness scores.**
+
+**We can see that the generosity variable affects negatively. The reason for this may be that individuality is at the forefront in developed countries and does not affect the happiness score.**
+
+**When we consider the cefficient data, it is seen that GDP per capita, Social support and Freedom to make life choices are the most important variables in the happiness score.**
+
+-   Give a brief summary what you have done in previous sections.
+
+**Firstly, I selected my dataset and explained the motivation behind it. Then, I provided information about the dataset and identified the problem. Next, I researched different statistical modeling methods and concluded that regression analysis was the best option. Then, I described the types and explanations of each variable. I provided some information about the dataset. Afterwards, I built the regression model and calculated the p-values for each variable. Additionally, I created plots to compare happiness with the independent variables. Then, I calculated the R-squared value for the model I built and provided explanations for it.**
+
+## References
+
+Dilber, B. (2020). R Uygulamaları – Bölüm 1: Basit Doğrusal Regresyon. Data Science for the Earth. https://www.datasciencearth.com/r-uygulamalari-bolum-1-basit-dogrusal-regresyon-analizi/
+
+GeeksforGeeks. (2023a). Difference between Statistical Model and Machine Learning. GeeksforGeeks. https://www.geeksforgeeks.org/difference-between-statistical-model-and-machine-learning/
+
+Tez Yardım Platformu. (2021, March 14). Regresyon ve Regresyon Analizi - 1 | Giriş, Türleri, Regresyon Denklemi, Regresyon Katsayısı [Video]. YouTube. https://www.youtube.com/watch?v=pGU8PWSBzAI
+
+R Programming 101. (2022, April 21). Linear regression using R programming [Video]. YouTube. https://www.youtube.com/watch?v=-mGXnm0fHtI
+
+GeeksforGeeks. (2023). Types of Regression Techniques in ML. GeeksforGeeks. https://www.geeksforgeeks.org/types-of-regression-techniques/
+
+GeeksforGeeks. (2023b). Linear Regression in Machine learning. GeeksforGeeks. https://www.geeksforgeeks.org/ml-linear-regression/
+
+GeeksforGeeks. (2021). Principal Component Analysis with R Programming. GeeksforGeeks. https://www.geeksforgeeks.org/principal-component-analysis-with-r-programming/
+
+
+
+Give a list of the available works/papers/sources that you used during finalizing your project.
+
+For APA format, please check;
+
+-   <https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/in_text_citations_the_basics.html>
